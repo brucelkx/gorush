@@ -18,7 +18,7 @@ const (
 // server is used to implement gorush grpc server.
 type server struct{}
 
-// Send implements helloworld.GreeterServer
+// Send implements send single notification.
 func (s *server) Send(ctx context.Context, in *pb.NotificationRequest) (*pb.NotificationReply, error) {
 	notification := gorush.PushNotification{
 		Platform: int(in.Platform),
