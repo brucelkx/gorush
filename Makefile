@@ -89,7 +89,9 @@ install: $(SOURCES)
 build: $(EXECUTABLE)
 
 $(EXECUTABLE): $(SOURCES)
-	go build -v -tags '$(TAGS)' -ldflags '$(EXTLDFLAGS)-s -w $(LDFLAGS)' -o bin/$@
+	go build -v -tags '$(TAGS)' \
+		-ldflags '$(EXTLDFLAGS)-s \
+		-w $(LDFLAGS)' -o bin/$@
 
 .PHONY: misspell-check
 misspell-check:
@@ -184,10 +186,15 @@ clean:
 		.cover
 
 rpc/example/node/gorush_*_pb.js: rpc/proto/gorush.proto
-	protoc -I rpc/proto rpc/proto/gorush.proto --js_out=import_style=commonjs,binary:rpc/example/node/ --grpc_out=rpc/example/node/ --plugin=protoc-gen-grpc=$(NODE_PROTOC_PLUGIN)
+	protoc -I rpc/proto rpc/proto/gorush.proto \
+		--js_out=import_style=commonjs,binary:rpc/example/node/ \
+		--grpc_out=rpc/example/node/ \
+		--plugin=protoc-gen-grpc=$(NODE_PROTOC_PLUGIN)
 
 rpc/proto/gorush.pb.go: rpc/proto/gorush.proto
-	protoc -I rpc/proto rpc/proto/gorush.proto --go_out=plugins=grpc:rpc/proto
+	protoc -I rpc/proto \
+		rpc/proto/gorush.proto \
+		--go_out=plugins=grpc:rpc/proto
 
 generate_proto: rpc/proto/gorush.pb.go rpc/example/node/gorush_*_pb.js
 
